@@ -5,19 +5,17 @@ const Header = () => {
     return (
         <div className="headerBlock">
             <h3 className="headerTitle">
-                <a href="#">
-                Game of Thrones DB
-                </a>
+                <button>Game of Thrones DB</button>
             </h3>
             <ul className="headerLinks">
                 <li>
-                    <a href="#">Characters</a>
+                    <button>Characters</button>
                 </li>
                 <li>
-                    <a href="#">Houses</a>
+                    <button>Houses</button>
                 </li>
                 <li>
-                    <a href="#">Books</a>   
+                    <button>Books</button>   
                 </li>
             </ul>
         </div>

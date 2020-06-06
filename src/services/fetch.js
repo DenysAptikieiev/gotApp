@@ -11,41 +11,60 @@ export default class GotService {
     
         return await res.json();
     };
-    getAllCharacters() {
-        return this.getResource(`/characters?page=5&pageSize=10`);
+    async getAllCharacters() {
+        const res = await this.getResource(`/characters?page=20`);
+        return res.map(this._transformCharacter);
     }
-    getCharacter(id) {
-        return this.getResource(`/characters/${id}`);
+    async getCharacter(id) {
+        const character = await this.getResource(`/characters/${id}`);
+        return this._transformCharacter(character);
     }
     getAllHouses() {
-        return this.getResource(`/houses`);
+        return this.getResource(`/houses?page=5`);
     }
     getHouse(id) {
         return this.getResource(`/houses/${id}`);
     }
     getAllBooks() {
-        return this.getResource(`/books`);
+        return this.getResource(`/books?page=5`);
     }
     getBook(id) {
         return this.getResource(`/books/${id}`);
     }
+
+    // _transformCharacter(char) {
+    //     return {
+    //         url: char.url,
+    //         name: char.name,
+    //         gender: char.gender,
+    //         born: char.born,
+    //         died: char.died,
+    //         culture: char.culture
+    //     }
+    // }
+
+    _transformCharacter = char => ({...char});
+
+    _transformHouse(house) {
+        return {
+            name: house.name,
+            region: house.region,
+            words: house.words,
+            titles: house.titles,
+            overlord: house.overlord,
+            ancestralWeapons: house.ancestralWeapons
+        }
+    }
+
+    _transformBook (book) {
+        return {
+            name: book.name,
+            numberOfPages: book.numberOfPages,
+            publiser: book.publiser,
+            released: book.released
+        }
+    }
 };
 
-const got = new GotService();
-
-got.getAllCharacters()
-    .then(res => res.forEach(element => console.log(`Персонажи: ${element.name}`)));
-got.getCharacter(500)
-    .then(res => console.log(`Персонаж: ${res.name} с титулом: ${res.titles}`));
-
-got.getAllHouses()
-    .then(res => res.forEach(elem => console.log(`Дома: ${elem.name}`)));
-got.getHouse(260)
-    .then(res => console.log(`Name house: ${res.name}, region: ${res.region}`));
-
-got.getAllBooks()
-    .then(res => res.forEach(elem => console.log(`Книги: ${elem.name}`))); 
-got.getBook(10)
-    .then(res => console.log(`Name book: ${res.name} country: ${res.country}`));
 
 
