@@ -1,13 +1,11 @@
 import React from 'react';
-import img from './error.jfif';
-import './errorMessage.css';
+import './errorMessage.sass';
 
 const ErrorMessage = () => {
     return (
-        <>
-            <img src={img} alt="error"/>
-            <span>Something goes wrong</span>
-        </>
+        <div className="error-block">
+            <span>Something goes wrong!!!</span>
+        </div>
     )
 }
 

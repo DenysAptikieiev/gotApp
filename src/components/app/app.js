@@ -1,30 +1,39 @@
 import React, {Component} from 'react';
+import { Button } from 'reactstrap';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
 import ErrorMessage from '../errorMessage';
+import CharacterPage from '../characterPage';
 
-import './app.css';
+import './app.sass';
 
 export default class App extends Component {
     state = {
         showRandomChar: true,
-        error: false
+        error: false,
+    }
+    componentDidCatch() {
+        this.setState({
+            error: true
+        })
     }
     toggleRandomChar = () => {
         this.setState((state) => {
+            const { showRandomChar } = state
             return {
-                showRandomChar: !state.showRandomChar,
+                showRandomChar: !showRandomChar,
             }
         });
     }
+    
     render() {
         if (this.state.error) {
             return <ErrorMessage/>
         }
-        const char = this.state.showRandomChar ? <RandomChar/> : null;
+
+        const char = this.state.showRandomChar ? <RandomChar/> : null
+        
         return (
             <> 
                 <Container>
@@ -34,21 +43,14 @@ export default class App extends Component {
                     <Row>
                         <Col lg={{size: 5, offset: 0}}>
                             {char}
-                            <button className="toggle-btn" onClick={this.toggleRandomChar}>
+                            <Button color="primary" onClick={this.toggleRandomChar}>
                                 Toggle random character
-                            </button>
+                            </Button>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList />
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails />
-                        </Col>
-                    </Row>
+                    <CharacterPage />
                 </Container>
             </>
-        );
+        )
     }
 };

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import './randomChar.css';
-import GotService from '../../services/fetch.js';
+import './randomChar.sass';
+import GotService from '../../services/gotService.js';
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
 
@@ -14,17 +14,15 @@ export default class RandomChar extends Component {
     gotService = new GotService();
     
     componentDidMount = () => {
-        console.log('mounting');
         this.updateChar();
-        this.timerId = setInterval(this.updateChar, 2000);
+        this.timerId = setInterval(this.updateChar, 60000);
     }
     
     componentWillUnmount = () => {
-        // console.log('unmounting');
         clearInterval(this.timerId);
     }
 
-    onCharLoaded = (char) => {
+    onCharLoaded = char => {
         this.setState({
             char,
             loading: false,
@@ -47,7 +45,6 @@ export default class RandomChar extends Component {
     }
 
     render() {
-        console.log('render');
 
         const {char, loading, error} = this.state
 
@@ -66,11 +63,10 @@ export default class RandomChar extends Component {
 }
 
 const View = ({char}) => {
-    const {url, name, gender, born, died, culture} = char;
-
+    let {name, gender, born, died, culture} = char;
+    
     return (
         <>
-        <p>{url}</p>
             <h4>{name}</h4>
             <ul className="list-group list-group-flush">
                 <li className="list-group-item d-flex justify-content-between">

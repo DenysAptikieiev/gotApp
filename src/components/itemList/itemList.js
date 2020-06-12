@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import './itemList.css';
-import GotService from '../../services/fetch.js';
+import './itemList.sass';
+import GotService from '../../services/gotService.js';
 import Spinner from '../spinner';
 
 export default class ItemList extends Component {
@@ -8,7 +8,8 @@ export default class ItemList extends Component {
     gotService = new GotService();
 
     state = {
-        charList: null
+        charList: null,
+        error: false
     }
 
     componentDidMount() {
@@ -17,31 +18,38 @@ export default class ItemList extends Component {
                 this.setState({
                     charList
                 })
-            })
+            });
     }
+
+
+    renderItems(arr) {
+        return arr.map((item, i) => {
+            const {name, id} = item;
+            return (
+                <li 
+                    key={id}
+                    onClick={() => this.props.onCharSelected(id)}
+                    className="list-group-item"
+                >
+                    {name}
+                </li>
+            );
+        });
+    };
 
     render() {
-
         const {charList} = this.state;
 
-        if(!charList) {
-            return (
-                <Spinner/>
-            )
+        if (!charList) {
+            return <Spinner/>;
         }
 
+        const items = this.renderItems(charList);
+
         return (
-            <ul className="item-list list-group">
-                <li className="list-group-item">
-                    John Snow
-                </li>
-                <li className="list-group-item">
-                    Brandon Stark
-                </li>
-                <li className="list-group-item">
-                    Geremy
-                </li>
+            <ul className="item-list">
+                {items}
             </ul>
         );
-    }
-}
+    };
+};
