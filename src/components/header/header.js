@@ -1,21 +1,22 @@
 import React from 'react';
 import './header.sass';
+import {Link} from 'react-router-dom';
 
 const Header = () => {
     return (
         <div className="headerBlock">
             <h3 className="headerTitle">
-                <button>Game of Thrones DB</button>
+                <Link to='/'>Game of Thrones DB</Link>
             </h3>
             <ul className="headerLinks">
                 <li>
-                    <button>Characters</button>
+                    <Link to='/characters'>Characters</Link>
                 </li>
                 <li>
-                    <button>Houses</button>
+                    <Link to='/houses'>Houses</Link>
                 </li>
                 <li>
-                    <button>Books</button>   
+                    <Link to='/books'>Books</Link>   
                 </li>
             </ul>
         </div>
