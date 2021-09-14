@@ -7,51 +7,53 @@ import RowBlock from '../rowBlock';
 
 export default class HousesPage extends Component {
 
-    gotService = new GotService();
+  gotService = new GotService();
 
-    state = {
-        selectedHouse: null,
-        error: false
+  state = {
+    selectedHouse: null,
+    error: false
+  }
+
+  componentDidCatch() {
+    this.setState({
+      error: true
+    })
+  }
+
+  onItemSelected = (id) => {
+    this.setState({
+      selectedHouse: id
+    })
+  }
+
+  render() {
+    if (this.state.error) {
+      return <ErrorMessage/>
     }
 
-    componentDidCatch() {
-        this.setState({
-            error: true
-        })
-    }
-    onItemSelected = (id) => {
-        this.setState({
-            selectedHouse: id
-        })
-    }
-    render() {
-        if (this.state.error) {
-            return <ErrorMessage/>
-        }
+    const itemList = (
+      <ItemList
+        getData={this.gotService.getAllHouses}
+        onItemSelected={this.onItemSelected}
+        renderItem={({name}) => `${name}`}
+      />
+    );
 
-        const itemList = (
-            <ItemList 
-                getData={this.gotService.getAllHouses}
-                onItemSelected={this.onItemSelected}
-                renderItem={({name}) => `${name}`}
-            />
-        );
+    const houseDetails = (
+      <ItemDetails
+        itemId={this.state.selectedHouse}
+        getData={this.gotService.getHouse}
+      >
+        <Field field='region' label='Region'/>
+        <Field field='words' label='Words'/>
+        <Field field='titles' label='Titles'/>
+        <Field field='overlord' label='Overlord'/>
+      </ItemDetails>
+    );
 
-        const houseDetails = (
-            <ItemDetails 
-                itemId={this.state.selectedHouse}
-                getData={this.gotService.getHouse}
-            >
-                <Field field='region' label='Region'/>
-                <Field field='words' label='Words'/>
-                <Field field='titles' label='Titles'/>
-                <Field field='overlord' label='Overlord'/>
-            </ItemDetails>
-        );
-
-        return(
-            <RowBlock left={itemList} right={houseDetails}/>
-        )
-    }
+    return (
+      <RowBlock left={itemList} right={houseDetails}/>
+    )
+  }
 
 }

@@ -1,54 +1,47 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import './itemList.sass';
 import Spinner from '../spinner';
-
-export default class ItemList extends Component {
-
-    state = {
-        itemList: null,
-        error: false
-    }
-
-    componentDidMount() {
-        const {getData} = this.props;
-        getData()
-            .then(itemList => {
-                this.setState({
-                    itemList
-                })
-            });
-    }
+import ErrorMessage from '../errorMessage';
 
 
-    renderItems(arr) {
-        return arr.map((item) => {
-            const {id} = item;
-            const label = this.props.renderItem(item)
-            return (
-                <li 
-                    key={id}
-                    onClick={() => this.props.onItemSelected(id)}
-                    className="list-group-item"
-                >
-                    {label}
-                </li>
-            );
-        });
-    };
+const ItemList = ({getData, onItemSelected, renderItem}) => {
+  
+  const [error, setError] = useState(false);
+  const [itemList, setItemList] = useState([]);
 
-    render() {
-        const {itemList} = this.state;
+  useEffect(() => {
+    getData()
+      .then(data => setItemList(data))
+      .catch(error => setError(true));
+  }, [])
 
-        if (!itemList) {
-            return <Spinner/>;
-        }
 
-        const items = this.renderItems(itemList);
+  const renderItems = arr => {
+    return arr.map((item) => {
+      const {id} = item;
+      const label = renderItem(item)
+      return (
+        <li
+          key={id}
+          onClick={() => onItemSelected(id)}
+          className="list-group-item"
+        >
+          {label}
+        </li>
+      );
+    });
+  };
+  if (!itemList) {
+    return <Spinner/>;
+  }
 
-        return (
-            <ul className="item-list">
-                {items}
-            </ul>
-        );
-    };
+  const items = !error ? renderItems(itemList) : <ErrorMessage/>;
+
+  return (
+    <ul className="item-list">
+      {items}
+    </ul>
+  );
 };
+
+export default ItemList;
